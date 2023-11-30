@@ -3,16 +3,24 @@ function calcularNotaFiscal() {
     const taxaImposto = parseFloat(document.getElementById("taxaImposto").value);
     const imposto = (valorServico * taxaImposto) / 100;
     const total = valorServico + imposto;
+    const xmlDoc = document.implementation.createDocument(null, 'NotaFiscal', null);
 
-    const notaFiscalTexto = `
-        Nota Fiscal de Serviço
-        --------------------------
-        Valor do Serviço: R$ ${valorServico.toFixed(2)}
-        Imposto (${taxaImposto}%): R$ ${imposto.toFixed(2)}
-        Total a Pagar: R$ ${total.toFixed(2)}
-    `;
+    const valorServicoElem = xmlDoc.createElement('ValorServico');
+    valorServicoElem.textContent = valorServico.toFixed(2);
 
-    alert(notaFiscalTexto);
+    const impostoElem = xmlDoc.createElement('Imposto');
+    impostoElem.textContent = imposto.toFixed(2);
+
+    const totalElem = xmlDoc.createElement('Total');
+    totalElem.textContent = total.toFixed(2);
+
+    xmlDoc.documentElement.appendChild(valorServicoElem);
+    xmlDoc.documentElement.appendChild(impostoElem);
+    xmlDoc.documentElement.appendChild(totalElem);
+
+    const xmlString = new XMLSerializer().serializeToString(xmlDoc);
+
+    alert(`Nota Fiscal em XML:\n\n${xmlString}`);
 
     return false;
 }
